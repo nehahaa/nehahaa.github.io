@@ -126,32 +126,32 @@ function hideLoading() {
 function drawCanvas() {
 	// clear whatever is in the canvas
 	context.clearRect(0, 0, canvas.width, canvas.height);
-	
+
 	//Update the tween
 	TWEEN.update();
-	
+
 	// Calculate how much the canvas should rotate
 	var rotate_x = (pointer.y * -0.15) + (motion.y * -1.2);
 	var rotate_y = (pointer.x * 0.15) + (motion.x * 1.2);
-	
+
 	canvas.style.transform = "rotateX(" + rotate_x + "deg) rotateY(" + rotate_y + "deg)";
-	
+
 	// Loop through each layer and draw it to the canvas
 	layer_list.forEach(function(layer, index) {
-		
+
 		layer.position = getOffset(layer);
-		
+
 		if (layer.blend) {
 			context.globalCompositeOperation = layer.blend;
 		} else {
 			context.globalCompositeOperation = 'normal';
 		}
-		
+
 		context.globalAlpha = layer.opacity;
-		
+
 		context.drawImage(layer.image, layer.position.x, layer.position.y);
 	});
-	
+
 	requestAnimationFrame(drawCanvas);
 }
 
@@ -159,16 +159,16 @@ function getOffset(layer) {
 	var touch_multiplier = 0.3;
 	var touch_offset_x = pointer.x * layer.z_index * touch_multiplier;
 	var touch_offset_y = pointer.y * layer.z_index * touch_multiplier;
-	
+
 	var motion_multiplier = 2.5;
 	var motion_offset_x = motion.x * layer.z_index * motion_multiplier;
 	var motion_offset_y = motion.y * layer.z_index * motion_multiplier;
-	
+
 	var offset = {
 		x: touch_offset_x + motion_offset_x,
 		y: touch_offset_y + motion_offset_y
 	};
-	
+
 	return offset;
 }
 
@@ -239,7 +239,7 @@ window.addEventListener('mouseup', function(event) {
 
 function endGesture () {
 	moving = false;
-	
+
 	TWEEN.removeAll();
 	var pointer_tween = new TWEEN.Tween(pointer).to({x: 0, y: 0}, 300).easing(TWEEN.Easing.Back.Out).start();
 }
@@ -265,7 +265,7 @@ window.addEventListener('deviceorientation', function(event) {
 		motion_initial.x = event.beta;
 		motion_initial.y = event.gamma;
 	}
-	
+
 	if (window.orientation === 0) {
 		// The device is in portrait orientation
 		motion.x = event.gamma - motion_initial.y;
